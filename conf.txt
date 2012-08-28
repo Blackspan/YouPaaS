@@ -1,14 +1,13 @@
 # Parameter for OpenStack
-user_os         	=    	youologuem
-password_os     	=       U6UIyHN4qJ
-tenant_os       	=      	YouPaaS
-authurl_os      	=      	http://openstack.rd.francetelecom.fr:5000/v2.0
-pool            	=      	OrangeLabs_VLAN352
-cidr            	=       10.0.3.0/24
-default_image  		=     	d9833ecf-c16c-43f6-9565-5ee0183f948e    		#Ubuntu 12.04 amd64 
-default_other		=	59e8bd8b-3a3a-4111-87d8-57477954bcbc			#Kernel Ubuntu 12.04 amd64
-default_flavor		=	1
-sql		     	=      	YouPaaSQL                                                             
+user_os         	=    	
+password_os     	=       
+tenant_os       	=      	
+authurl_os      	=      	
+pool            	=      	
+cidr            	=       
+default_image  		=     	    		#Ubuntu 12.04 amd64 
+default_flavor		=	
+sql		     	      =      	YouPaaSQL                                                             
 apache		      	=       YouPaaSApache                                                      
 nginx		      	=       YouPaaSNginx                                                          
 req             	=       20.0							#Number request maximum
