@@ -1,0 +1,84 @@
+Content-Type: multipart/mixed; boundary="===============8739134271479584318=="
+MIME-Version: 1.0
+
+--===============8739134271479584318==
+Content-Type: text/cloud-config; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="t.txt"
+
+#cloud-config
+apt_update: true
+packages:
+ - zip
+ - apache2
+ - php5
+ - mysql-client
+ - php5-intl
+ - php5-sqlite
+ - php-apc
+ - php5-cli
+ - php5-mysql
+apt_proxy: http://p-goodway.rd.francetelecom.fr:3128/;
+timezone: Europe/Paris
+
+
+--===============8739134271479584318==
+Content-Type: text/x-shellscript; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="t.sh"
+
+#!/bin/bash
+FTP_HOST=10.0.3.3
+FTP_USER=yacouba
+FTP_PASS=yakuzabj
+ftp -in <<EOF
+  open ${FTP_HOST}
+  user ${FTP_USER} ${FTP_PASS}
+  bin
+  verbose
+  prompt
+  get blackspan.tar
+  bye
+EOF
+echo "Blackspan Downloaded"
+tar -zxvf blackspan.tar
+rm -rf blackspan.tar
+cd /etc/apache2/sites-enabled/
+a2dissite 000-default
+cd /etc/apache2/
+find ports.conf -type f | xargs grep "Listen"
+sed -i 's/80/8080/g' ports.conf
+find ports.conf -type f | xargs grep "Listen"
+sudo /etc/init.d/apache2 restart
+echo "<VirtualHost *:8080>
+ServerAdmin openstack@orange.com
+DocumentRoot /blackspan/web/
+<Directory /blackspan/web/>
+    DirectoryIndex index.php
+    Options Indexes FollowSymLinks MultiViews
+    AllowOverride All
+    Order allow,deny
+    allow from all
+</Directory>
+ErrorLog ${APACHE_LOG_DIR}/error.log
+LogLevel warn
+CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>"  >> /etc/apache2/sites-available/blackspanhost
+cd /etc/apache2/sites-available/
+a2ensite blackspanhost
+sudo /etc/init.d/apache2 restart
+echo "+++++++++++++ Blackspan Installed +++++++++++++"
+chown -R www-data:www-data /blackspan/*
+echo "DirectoryIndex index.html index.htm index.php" >> /etc/apache2/httpd.conf
+ip=$(ifconfig eth0 |grep "inet addr:"|awk '{print $2}'|awk -F : '{print $2}')
+echo "$ip" >> /tmp/ipaddress.txt
+cd /etc/php5/cli/
+find php.ini -type f | xargs grep ";date.timezone ="
+sed -i 's/;date.timezone =/date.timezone = Europe/g' php.ini
+sed -i 's/Deny/Allow/g' /etc/apache2/mods-enabled/status.conf
+sudo /etc/init.d/apache2 restart
+echo "Configuration Complete"
+
+--===============8739134271479584318==--

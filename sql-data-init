@@ -1,0 +1,44 @@
+Content-Type: multipart/mixed; boundary="===============7034588089095327976=="
+MIME-Version: 1.0
+
+--===============7034588089095327976==
+Content-Type: text/cloud-config; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="sql_data.txt"
+
+#cloud-config
+apt_update: true
+packages:
+ - mysql-server
+ - mysql-client
+apt_proxy: http://p-goodway.rd.francetelecom.fr:3128/;
+
+
+--===============7034588089095327976==
+Content-Type: text/x-shellscript; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="sql_data.sh"
+
+#!/bin/bash
+echo "Installation Mysql-Server Started"
+mysqladmin -u root password blackspan
+echo "Password changed"
+echo "CREATE database blackspan;" | mysql -u root --password=blackspan
+echo "database for blackspan created"
+echo "use mysql; CREATE USER blackspan IDENTIFIED BY 'blackspan';" | mysql -u root --password=blackspan
+echo "User created in database"
+echo "GRANT ALL ON blackspan.* TO 'blackspan'@'%';" | mysql -u root --password=blackspan
+echo "Grant attribute"
+touch /tmp/ipddress.txt
+ip=$(ifconfig eth0 |grep "inet addr:"|awk '{print $2}'|awk -F : '{print $2}')
+cd /etc/mysql/
+find my.cnf -type f | xargs grep "bind"
+sed -i 's/127.0.0.1/'$ip'/g' my.cnf
+find my.cnf -type f | xargs grep "bind"
+sudo /etc/init.d/mysql restart
+echo "configuration complete"
+
+
+--===============7034588089095327976==--

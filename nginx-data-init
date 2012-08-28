@@ -1,0 +1,68 @@
+Content-Type: multipart/mixed; boundary="===============1336037629=="
+MIME-Version: 1.0
+
+--===============1336037629==
+Content-Type: text/cloud-config; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="os_ngx.txt"
+
+#cloud-config
+apt_update: true
+packages:
+ - nginx
+ - mysql-client
+#Configure proxy
+apt_proxy: http://p-goodway.rd.francetelecom.fr:3128/;
+timezone: Europe/Paris
+
+--===============1336037629==
+Content-Type: text/x-shellscript; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="os_ngx.sh"
+
+#!/bin/bash
+cd /etc/nginx/sites-enabled/
+rm default
+cd ../sites-available/
+echo "server {
+listen   80;
+server_name localhost;
+location / {
+        proxy_pass   http://varip:8080/;
+        access_log /var/log/nginx/access.log;
+        error_log /var/log/nginx/error.log;
+            }
+                        }"              >> mywebsite
+sed -i 's/varip/apacheip/g' mywebsite
+cp mywebsite ../sites-enabled/mywebsite
+echo "proxy_redirect off;
+proxy_set_header Host varhost;
+proxy_set_header X-Real-IP varremote_addr;
+proxy_set_header X-Forwarded-For varproxy_add_x_forwarded_for;
+client_max_body_size 10m;
+client_body_buffer_size 128k;
+client_header_buffer_size 64k;
+proxy_connect_timeout 90;
+proxy_send_timeout 90;
+proxy_read_timeout 90;
+proxy_buffer_size 16k;
+proxy_buffers 32 16k;
+proxy_busy_buffers_size 64k;"  >> /etc/nginx/conf.d/proxy.conf
+cd /etc/nginx/conf.d/
+sed -i 's/varhost/$host/g' proxy.conf
+sed -i 's/varremote_addr/$remote_addr/g' proxy.conf
+sed -i 's/varproxy_add_x_forwarded_for/$proxy_add_x_forwarded_for/g' proxy.conf
+sudo /etc/init.d/nginx restart
+echo "======== Nginx Restart ========="
+touch /tmp/ipddress.txt
+ip=$(ifconfig eth0 |grep "inet addr:"|awk '{print $2}'|awk -F : '{print $2}')
+echo "$ip" >> /tmp/ipaddress.txt
+host=$(hostname)
+echo "$host" >> /tmp/ipaddress.txt
+echo "===== Configuration finished ====="
+
+
+--===============1336037629==--
+
