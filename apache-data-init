@@ -19,7 +19,7 @@ packages:
  - php-apc
  - php5-cli
  - php5-mysql
-apt_proxy: http://p-goodway.rd.francetelecom.fr:3128/;
+apt_proxy: http://localhost:3128/;
 timezone: Europe/Paris
 
 

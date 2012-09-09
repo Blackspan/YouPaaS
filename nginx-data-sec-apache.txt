@@ -14,7 +14,7 @@ packages:
  - nginx
  - mysql-client
 #Configure proxy
-apt_proxy: http://p-goodway.rd.francetelecom.fr:3128/;
+apt_proxy: http://localhost:3128/;
 timezone: Europe/Paris
 
 --===============1336037629==
@@ -63,13 +63,14 @@ worker_processes 4;
 pid /var/run/nginx.pid;
 
 events {
-        worker_connections 768;
+        worker_connections 1024;
 }
 http {
 
-        upstream varupstream {       
-        server loadbalance1:8080;
-        server loadbalance2:8080;
+        upstream varupstream {  
+        server loadbalance1:8080 max_fails=3 weight=2;
+        server loadbalance2:8080 max_fails=3 weight=2;
+	fair;
 }
         sendfile on;
         tcp_nopush on;

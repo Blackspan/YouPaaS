@@ -1,4 +1,5 @@
 # Parameter for OpenStack
+<<<<<<< HEAD
 user_os         	=    	
 password_os     	=       
 tenant_os       	=      	
@@ -8,6 +9,18 @@ cidr            	=
 default_image  		=     	    		#Ubuntu 12.04 amd64 
 default_flavor		=	
 sql		     	      =      	YouPaaSQL                                                             
+=======
+user_os         	=    	youologuem
+password_os     	=       U6UIyHN4qJ
+tenant_os       	=      	YouPaaS
+authurl_os      	=      	http://localhost:5000/v2.0
+pool            	=      	
+cidr            	=       10.0.3.0/24
+default_image  		=     	d9833ecf-c16c-43f6-9565-5ee0183f948e    		#Ubuntu 12.04 amd64 
+#default_other		=	59e8bd8b-3a3a-4111-87d8-57477954bcbc			#Kernel Ubuntu 12.04 amd64
+default_flavor		=	1
+sql		     	=      	YouPaaSQL                                                             
+>>>>>>> youpaas
 apache		      	=       YouPaaSApache                                                      
 nginx		      	=       YouPaaSNginx                                                          
 req             	=       20.0							#Number request maximum
@@ -24,6 +37,14 @@ bdd			=	youpaas.db						#The database name
 secapache		=	YouPaaSApache02	
 secnginx		=	YouPaaSNginx02	
 secnginx-data		= 	nginx-data-sec-apache.txt
+triapache               =       YouPaaSApache03
+tringinx		= 	YouPaaSNginx03
 ## TMP FILE
 tmpnginx		=	/tmp/nginx-data-sec-apache.txt
 tmpnginxone		=	/tmp/nginx-data-init.txt
+tmpnginx3		=	/tmp/nginx-data-tri-apache.txt
+#BD
+db_host			=	localhost
+db_name			=	youpaas
+db_user			=	youpaas
+db_password		=	youpaas
