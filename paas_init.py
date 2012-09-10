@@ -73,7 +73,6 @@ try:
         yp.security_group_rules.create( apache_id, 'tcp', '22', '22', dicoval['cidr'] )
         yp.security_group_rules.create( apache_id, 'tcp', '8080', '8080', dicoval['cidr'] )
         yp.security_group_rules.create( apache_id, 'tcp', '3306', '3306', dicoval['cidr'] )
-        #yp.security_group_rules.create( apache_id, 'tcp', '21', '21', dicoval['cidr'] )
         time.sleep(15)
         #""" Nginx """
         nginx = yp.security_groups.find(name='nginx_secure')
@@ -376,24 +375,24 @@ while True:
                         conn.commit()
                         print ''
                         time.sleep(5)
+                        m = yp.servers.find(name = dicoval['nginx'])
+                        n = m.networks['private_3'][1]
+                        print n
+                        time.sleep(10)
+                        p = yp.servers.find(name = dicoval['apache'])
+                        r = p.networks['private_3'][0]
+                        print r
+                        time.sleep(10)
+                        a = yp.servers.find(name = dicoval['secapache'])
+                        b = a.networks['private_3'][0]
+                        print b
+                        time.sleep(10)
+                        #fin
                         pass
                 try:
                         print '.ud'
                         os.system('rm -rf /tmp/*')
                         os.system('cp nginx-data-sec-apache.txt /tmp/nginx-data-sec-apache.txt')
-                        m = yp.servers.find(name = dicoval['nginx'])
-                        n = m.networks['private_3'][1]
-                        print n
-                        time.sleep(15)
-                        p = yp.servers.find(name = dicoval['apache'])
-                        r = p.networks['private_3'][0]
-                        print r
-                        time.sleep(15)
-                        a = yp.servers.find(name = dicoval['secapache'])
-                        b = a.networks['private_3'][0]
-                        print b
-                        print 'public ip - private ip web server 1 and web server 2'
-                        time.sleep(10)
                         f = open(dicoval['tmpnginx'],'r')
                         chaine = f.read()
                         result = chaine.replace("apacheip", n)
@@ -447,7 +446,6 @@ while True:
                 except:
                         print ''
 
-                #delete the first server nginx
                 try:
                         l = yp.servers.find(name = dicoval['nginx'])
                         m = l.id
@@ -471,7 +469,7 @@ while True:
                         print 'website up'
                         time.sleep(60)
                 except:
-                        print ''
+                        print '.go'
                         time.sleep(1)
         else:
                 def nginxreinit():
