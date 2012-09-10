@@ -11,7 +11,6 @@ Content-Disposition: attachment; filename="os_ngx.txt"
 apt_update: true
 packages:
  - nginx
- - mysql-client
 #Configure proxy
 apt_proxy: http://localhost:3128/;
 timezone: Europe/Paris
