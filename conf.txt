@@ -1,50 +1,30 @@
 # Parameter for OpenStack
-<<<<<<< HEAD
-user_os         	=    	
-password_os     	=       
-tenant_os       	=      	
-authurl_os      	=      	
-pool            	=      	
-cidr            	=       
-default_image  		=     	    		#Ubuntu 12.04 amd64 
-default_flavor		=	
-sql		     	      =      	YouPaaSQL                                                             
-=======
-user_os         	=    	youologuem
-password_os     	=       U6UIyHN4qJ
-tenant_os       	=      	YouPaaS
-authurl_os      	=      	http://localhost:5000/v2.0
-pool            	=      	
-cidr            	=       10.0.3.0/24
-default_image  		=     	d9833ecf-c16c-43f6-9565-5ee0183f948e    		#Ubuntu 12.04 amd64 
-#default_other		=	59e8bd8b-3a3a-4111-87d8-57477954bcbc			#Kernel Ubuntu 12.04 amd64
-default_flavor		=	1
-sql		     	=      	YouPaaSQL                                                             
->>>>>>> youpaas
-apache		      	=       YouPaaSApache                                                      
-nginx		      	=       YouPaaSNginx                                                          
-req             	=       20.0							#Number request maximum
-req_min			=	10.0							#Number request minimum
-sql-init-file		= 	sql-data-init						#Default user-data file for sql server
-apache-init-file	= 	apache-data-init					#Default user-data file for webserver
-nginx-init-file		=	nginx-data-init						#Default user-data for nginx
-secgroup-sql		= 	mysql_secure 						#Name security groups
-secgroup-apa		=	apache_secure						#Security groups
-secgroup-ngx		= 	nginx_secure						#Security groups
-#Database
-bdd			=	youpaas.db						#The database name
-#Server Overload
-secapache		=	YouPaaSApache02	
-secnginx		=	YouPaaSNginx02	
-secnginx-data		= 	nginx-data-sec-apache.txt
-triapache               =       YouPaaSApache03
-tringinx		= 	YouPaaSNginx03
-## TMP FILE
-tmpnginx		=	/tmp/nginx-data-sec-apache.txt
-tmpnginxone		=	/tmp/nginx-data-init.txt
-tmpnginx3		=	/tmp/nginx-data-tri-apache.txt
-#BD
-db_host			=	localhost
-db_name			=	youpaas
-db_user			=	youpaas
-db_password		=	youpaas
+user_os                 =       youologuem                                              #Username OpenStack
+password_os             =       U6UIyHN4qJ                                              #Password
+tenant_os               =       YouPaaS                                                 #Name of tenant
+authurl_os              =       http://localhost:5000/v2.0                              #Authentication url
+pool                    =       OrangeLabs_VLAN352                                      #Name of the pool
+cidr                    =       10.0.3.0/24                                             #Virtual network for the virtual machine
+default_image           =       d9833ecf-c16c-43f6-9565-5ee0183f948e                    #Ubuntu 12.04 amd64
+default_flavor          =       1                                                       #Id flavor
+sql                     =       YouPaaSQL                                               #Name of mysql server
+apache                  =       YouPaaSApache                                           #Name of Web server Apache
+nginx                   =       YouPaaSNginx                                            #Name of the proxy
+req                     =       20.0                                                    #Number request maximum
+req_min                 =       10.0                                                    #Number request minimum
+req_tri                 =       60.0                                                    #Number request for the two webserver
+sql-init-file           =       sql-data-init                                           #Default user-data file for sql server
+apache-init-file        =       apache-data-init                                        #Default user-data file for webserver
+nginx-init-file         =       nginx-data-init                                         #Default user-data for nginx
+secgroup-sql            =       mysql_secure                                            #Name security groups
+secgroup-apa            =       apache_secure                                           #Security groups
+secgroup-ngx            =       nginx_secure                                            #Security groups
+#Database                                                                               #Parameters of th databases
+bdd                     =       youpaas.db                                              #The database name, use sqlite3
+#Server Overload                                                                        #Parameter for overload
+secapache               =       YouPaaSApache02                                         #The second web server name
+secnginx                =       YouPaaSNginx02                                          #The second proxy nginx
+secnginx-data           =       nginx-data-sec-apache.txt                               #Userdata for the second web server
+## TMP FILE                                                                             #Folder /TMP/
+tmpnginx                =       /tmp/nginx-data-sec-apache.txt                          #Userdata second web server
+tmpnginxone             =       /tmp/nginx-data-init.txt                                #Userdata first and the second proxy
