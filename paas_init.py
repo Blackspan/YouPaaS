@@ -30,24 +30,23 @@ for lig in lignes:
         if len(sp)==2: dicoval[sp[0].strip()]=sp[1].strip()
 """ Creating database and tables for the program """
 try:
-        class database():
-                conn = sqlite3.connect(dicoval['bdd'])
-                c = conn.cursor()
-                c.execute("CREATE TABLE mysql(id INTEGER PRIMARY KEY, date text, hostname text, hostip text, state real)")
-                c.execute("CREATE TABLE apache(date text, hostname text, hostip text, state real)")
-                c.execute("CREATE TABLE nginx(date text, hostname text, hostip text, state real)")
-                c.execute("CREATE TABLE floatip(date text, hostip text, ip_public text)")
-                c.execute("CREATE TABLE seconde_apache(date text, hostname text, hostip text, state real)")
-                c.execute("CREATE TABLE seconde_nginx(date text, hostname text, hostip text, state real)")
-                c.execute("CREATE TABLE request(hostname text, hostip text, nombre INTEGER)")
-                conn.commit()
-                print 'creating a database with the tables'
+        conn = sqlite3.connect(dicoval['bdd'])
+        c = conn.cursor()
+        c.execute("CREATE TABLE mysql(id INTEGER PRIMARY KEY, date text, hostname                                                                             text, hostip text, state real)")
+        c.execute("CREATE TABLE apache(date text, hostname text, hostip text, sta                                                                            te real)")
+        c.execute("CREATE TABLE nginx(date text, hostname text, hostip text, stat                                                                            e real)")
+        c.execute("CREATE TABLE floatip(date text, hostip text, ip_public text)")
+        c.execute("CREATE TABLE seconde_apache(date text, hostname text, hostip t                                                                            ext, state real)")
+        c.execute("CREATE TABLE seconde_nginx(date text, hostname text, hostip te                                                                            xt, state real)")
+        c.execute("CREATE TABLE request(hostname text, hostip text, nombre INTEGE                                                                            R)")
+        conn.commit()
+        print 'creating a database with the tables'
 except:
         print 'database exists'
         pass
 
 """ Parameter OpenStack """
-yp = client.Client(dicoval['user_os'], dicoval['password_os'],  dicoval['tenant_os'], dicoval['authurl_os'], service_type="compute")
+yp = client.Client(dicoval['user_os'], dicoval['password_os'],  dicoval['tenant_o                                                                            s'], dicoval['authurl_os'], service_type="compute")
 """configuration access and security"""
 try:
         conn = sqlite3.connect(dicoval['bdd'])
@@ -58,27 +57,27 @@ try:
         file = open("youpaas_key.pem", "w")
         file.write(kprivate)
         file.close()
-        yp.security_groups.create(dicoval['secgroup-sql'], 'Security group for Mysql')
-        yp.security_groups.create(dicoval['secgroup-apa'], 'Security group for apache')
-        yp.security_groups.create(dicoval['secgroup-ngx'], 'Security group for nginx')
+        yp.security_groups.create(dicoval['secgroup-sql'], 'Security group for My                                                                            sql')
+        yp.security_groups.create(dicoval['secgroup-apa'], 'Security group for ap                                                                            ache')
+        yp.security_groups.create(dicoval['secgroup-ngx'], 'Security group for ng                                                                            inx')
         #""" Mysql """
         mysql = yp.security_groups.find(name='mysql_secure')
         mysql_id = mysql.id
-        yp.security_group_rules.create( mysql_id, 'tcp', '22', '22', dicoval['cidr'] )
-        yp.security_group_rules.create( mysql_id, 'tcp', '3306', '3306', dicoval['cidr'] )
+        yp.security_group_rules.create( mysql_id, 'tcp', '22', '22', dicoval['cid                                                                            r'] )
+        yp.security_group_rules.create( mysql_id, 'tcp', '3306', '3306', dicoval[                                                                            'cidr'] )
         time.sleep(15)
         #""" Apache """
         apache = yp.security_groups.find(name='apache_secure')
         apache_id = apache.id
-        yp.security_group_rules.create( apache_id, 'tcp', '22', '22', dicoval['cidr'] )
-        yp.security_group_rules.create( apache_id, 'tcp', '8080', '8080', dicoval['cidr'] )
-        yp.security_group_rules.create( apache_id, 'tcp', '3306', '3306', dicoval['cidr'] )
+        yp.security_group_rules.create( apache_id, 'tcp', '22', '22', dicoval['ci                                                                            dr'] )
+        yp.security_group_rules.create( apache_id, 'tcp', '8080', '8080', dicoval                                                                            ['cidr'] )
+        yp.security_group_rules.create( apache_id, 'tcp', '3306', '3306', dicoval                                                                            ['cidr'] )
         time.sleep(15)
         #""" Nginx """
         nginx = yp.security_groups.find(name='nginx_secure')
         nginx_id = nginx.id
-        yp.security_group_rules.create( nginx_id, 'tcp', '22', '22', dicoval['cidr'] )
-        yp.security_group_rules.create( nginx_id, 'tcp', '80', '8080', '0.0.0.0/0' )
+        yp.security_group_rules.create( nginx_id, 'tcp', '22', '22', dicoval['cid                                                                            r'] )
+        yp.security_group_rules.create( nginx_id, 'tcp', '80', '8080', '0.0.0.0/0                                                                            ' )
         time.sleep(15)
 except:
         print 'access and security already congured'
@@ -111,7 +110,7 @@ except:
         x = yp.servers.find(name =  dicoval['sql'])
         w = x.networks['private_3'][0]
         v = x.status
-        c.execute("INSERT INTO mysql VALUES (?, ?, ?, ?, ?)",('1', now, dicoval['sql'], w, v,))
+        c.execute("INSERT INTO mysql VALUES (?, ?, ?, ?, ?)",('1', now, dicoval['                                                                            sql'], w, v,))
         conn.commit()
         pass
 
@@ -139,7 +138,7 @@ except:
         a = yp.servers.find(name =  dicoval['apache'])
         b = a.networks['private_3'][0]
         v = a.status
-        c.execute("INSERT INTO apache VALUES (?, ?, ?, ?)",(now, dicoval['apache'], b, v,))
+        c.execute("INSERT INTO apache VALUES (?, ?, ?, ?)",(now, dicoval['apache'                                                                            ], b, v,))
         conn.commit()
         pass
 
@@ -194,7 +193,7 @@ except:
         x = yp.servers.find(name =  dicoval['nginx'])
         w = x.networks['private_3'][0]
         v = x.status
-        c.execute("INSERT INTO nginx VALUES (?, ?, ?, ?)",(now, dicoval['nginx'], w, v,))
+        c.execute("INSERT INTO nginx VALUES (?, ?, ?, ?)",(now, dicoval['nginx'],                                                                             w, v,))
         conn.commit()
         pass
 def allservers():
@@ -212,6 +211,7 @@ def associp(name):
         ip = yp.floating_ips.create(pool = dicoval['pool'])
         name.add_floating_ip(ip.ip)
         print '-- initialisation complete --'
+        print '-- Web application BlackSpan is deployed --'
 try:
         a = yp.servers.find(name = dicoval['nginx'])
         b = a.id
@@ -229,11 +229,11 @@ except:
         bi = ai.networks['private_3'][0]
         bo = '0'
         x = yp.servers.find(name =  dicoval['nginx'])
-        w = x.networks['private_3'][0]
-        c.execute("INSERT INTO floatip VALUES (?, ?, ?)",(now, dicoval['nginx'], w,))
-        c.execute("INSERT INTO request VALUES (?, ?, ?)",(dicoval['apache'], bi, bo,))
-        c.execute("INSERT INTO request VALUES (?, ?, ?)",(dicoval['secapache'], bi, bo,))
-        c.execute("INSERT INTO request VALUES (?, ?, ?)",('all_servers', bi, bo,))
+        w = x.networks['private_3'][1]#de 0 a 1
+        c.execute("INSERT INTO floatip VALUES (?, ?, ?)",(now, 'floating_ip', w,)                                                                            )
+        c.execute("INSERT INTO request VALUES (?, ?, ?)",(dicoval['apache'], bi,                                                                             bo,))
+        c.execute("INSERT INTO request VALUES (?, ?, ?)",(dicoval['secapache'], b                                                                            i, bo,))
+        c.execute("INSERT INTO request VALUES (?, ?, ?)",('all_servers', bi, bo,)                                                                            )
         conn.commit()
         pass
 
@@ -242,7 +242,7 @@ print '-- wait a few minutes --'
 time.sleep(60)
 
 def countreq(names):
-        """Function that counts the number of requests for the second web server apache """
+        """Function that counts the number of requests for the second web server                                                                             apache """
         a = yp.servers.find(name = names)
         b = a.networks['private_3'][0]
         h = ":8080/server-status -o req_value2"
@@ -260,7 +260,7 @@ def countreq(names):
                         file.write(ligne)
                         file.close()
         fichier.close()
-        os.system("cat nbre_req2 | sed -n '1p'| sed 's/<dt>//' |cut -d 'r' -f1 > cnt_req2")
+        os.system("cat nbre_req2 | sed -n '1p'| sed 's/<dt>//' |cut -d 'r' -f1 >                                                                             cnt_req2")
         os.system("rm -rf nbre_req2 ")
         try:
                 path = open('cnt_req2','rb')
@@ -275,7 +275,7 @@ def countreq(names):
                 pass
 
 while True:
-        """ The function counts the number of requests for the first web server apache. """
+        """ The function counts the number of requests for the first web server a                                                                            pache. """
         a = yp.servers.find(name = dicoval['apache'])
         b = a.networks['private_3'][0]
         h = ":8080/server-status -o req_value | clear"
@@ -293,7 +293,7 @@ while True:
                         file.write(ligne)
                         file.close()
         fichier.close()
-        os.system("cat nbre_req | sed -n '1p'| sed 's/<dt>//' |cut -d 'r' -f1 > cnt_req")
+        os.system("cat nbre_req | sed -n '1p'| sed 's/<dt>//' |cut -d 'r' -f1 > c                                                                            nt_req")
         os.system("rm -rf nbre_req")
         time.sleep(1)
         try:
@@ -316,7 +316,7 @@ while True:
                 ae = yp.servers.find(name = dicoval['apache'])
                 be = ae.status
                 if be == 'ACTIVE':
-                        c.execute("UPDATE request SET nombre=? WHERE hostname=?", ( count, dicoval['apache'],))
+                        c.execute("UPDATE request SET nombre=? WHERE hostname=?",                                                                             ( count, dicoval['apache'],))
                         conn.commit()
                         time.sleep(1)
                 else:
@@ -347,8 +347,8 @@ while True:
                         print 'all requests web server 1 and 2'
                         print count
                         time.sleep(1)
-                        c.execute("UPDATE request SET nombre=? WHERE hostname=?", ( count,'all_servers',))
-                        c.execute("UPDATE request SET nombre=? WHERE hostname=?", ( count2, dicoval['secapache'],))
+                        c.execute("UPDATE request SET nombre=? WHERE hostname=?",                                                                             ( count,'all_servers',))
+                        c.execute("UPDATE request SET nombre=? WHERE hostname=?",                                                                             ( count2, dicoval['secapache'],))
                         conn.commit()
                 else:
                         print '.'
@@ -371,10 +371,10 @@ while True:
                         x = yp.servers.find(name =  dicoval['secapache'])
                         w = x.networks['private_3'][0]
                         v = x.status
-                        c.execute("INSERT INTO seconde_apache VALUES (?, ?, ?, ?)",(now, dicoval['secapache'], w, v,))
+                        c.execute("INSERT INTO seconde_apache VALUES (?, ?, ?, ?)                                                                            ",(now, dicoval['secapache'], w, v,))
                         conn.commit()
                         print ''
-                        time.sleep(5)
+                        time.sleep(10)
                         m = yp.servers.find(name = dicoval['nginx'])
                         n = m.networks['private_3'][1]
                         print n
@@ -387,12 +387,11 @@ while True:
                         b = a.networks['private_3'][0]
                         print b
                         time.sleep(10)
-                        #fin
                         pass
                 try:
                         print '.ud'
                         os.system('rm -rf /tmp/*')
-                        os.system('cp nginx-data-sec-apache.txt /tmp/nginx-data-sec-apache.txt')
+                        os.system('cp nginx-data-sec-apache.txt /tmp/nginx-data-s                                                                            ec-apache.txt')
                         f = open(dicoval['tmpnginx'],'r')
                         chaine = f.read()
                         result = chaine.replace("apacheip", n)
@@ -424,7 +423,7 @@ while True:
                         x = yp.servers.find(name =  dicoval['secnginx'])
                         w = x.networks['private_3'][0]
                         v = x.status
-                        c.execute("INSERT INTO seconde_nginx VALUES (?, ?, ?, ?)",(now, dicoval['secnginx'], w, v,))
+                        c.execute("INSERT INTO seconde_nginx VALUES (?, ?, ?, ?)"                                                                            ,(now, dicoval['secnginx'], w, v,))
                         conn.commit()
                         time.sleep(45)
                         pass
@@ -450,7 +449,7 @@ while True:
                         l = yp.servers.find(name = dicoval['nginx'])
                         m = l.id
                         yp.servers.delete(m)
-                        c.execute("UPDATE nginx SET state=? WHERE hostname=?", ('DOWN', dicoval['nginx'],))
+                        c.execute("UPDATE nginx SET state=? WHERE hostname=?", ('                                                                            DOWN', dicoval['nginx'],))
                         conn.commit()
                 except:
                         pass
@@ -461,13 +460,15 @@ while True:
 
                 try:
                         i = yp.floating_ips.list()
-                        z = i[0]
+                        z = i[1] # de 0 a 1
                         h = z.ip
                         servers = yp.servers.list()
                         allocateip(servers[0], h)
-                        print 'attribute public ip in the new proxy'
-                        print 'website up'
-                        time.sleep(60)
+                        print 'Public ip is associated on the new proxy'
+                        print 'Webapp Down'
+                        time.sleep(2)
+                        print 'Webapp Up'
+                        time.sleep(50)
                 except:
                         print '.go'
                         time.sleep(1)
@@ -479,7 +480,7 @@ while True:
                         time.sleep(15)
                         x = yp.servers.find(name =  dicoval['nginx'])
                         w = x.networks['private_3'][0]
-                        c.execute("UPDATE nginx SET hostip=? WHERE hostname=?", (w, dicoval['nginx'],))
+                        c.execute("UPDATE nginx SET hostip=? WHERE hostname=?", (                                                                            w, dicoval['nginx'],))
                         conn.commit()
                         time.sleep(60)
 
@@ -497,10 +498,10 @@ while True:
                 if count < county and apastatus == 'ACTIVE':
                         nginxreinit()
                         time.sleep(30)
-                        c.execute("DELETE FROM seconde_apache WHERE hostname='YouPaaSApache02'")
-                        c.execute("DELETE FROM seconde_nginx WHERE hostname='YouPaaSNginx02'")
-                        c.execute("UPDATE request SET nombre=? WHERE hostname=?", ( '0','all_servers',))
-                        c.execute("UPDATE request SET nombre=? WHERE hostname=?", ( '0', dicoval['secapache'],))
+                        c.execute("DELETE FROM seconde_apache WHERE hostname='You                                                                            PaaSApache02'")
+                        c.execute("DELETE FROM seconde_nginx WHERE hostname='YouP                                                                            aaSNginx02'")
+                        c.execute("UPDATE request SET nombre=? WHERE hostname=?",                                                                             ( '0','all_servers',))
+                        c.execute("UPDATE request SET nombre=? WHERE hostname=?",                                                                             ( '0', dicoval['secapache'],))
                         conn.commit()
                         l = yp.servers.find(name = dicoval['secapache'])
                         m = yp.servers.find(name = dicoval['secnginx'])
@@ -509,23 +510,22 @@ while True:
                         yp.servers.delete(n)
                         yp.servers.delete(o)
                         time.sleep(10)
-                        c.execute("UPDATE nginx SET state=? WHERE hostname=?", ( 'ACTIVE', dicoval['nginx'],))
+                        c.execute("UPDATE nginx SET state=? WHERE hostname=?", (                                                                             'ACTIVE', dicoval['nginx'],))
                         conn.commit()
                         try:
                                 i = yp.floating_ips.list()
-                                z = i[0]
+                                z = i[1] #de 0 a 1
                                 h = z.ip
                                 servers = yp.servers.list()
                                 allocateip(servers[0], h)
                                 time.sleep(1)
                         except:
-                                print ''
+                                print '.'
                                 time.sleep(1)
                 else:
-                        print ''
+                        print '.'
         except:
                 pass
-
 conn.commit()
 path.close()
 c.close()
