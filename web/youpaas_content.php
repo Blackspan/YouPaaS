@@ -173,5 +173,27 @@ catch(PDOException $e)
 print 'Exception : '.$e->getMessage();
 }
 ?>
+</head>
+<h2> Adresse IP Public</h2>
+<?php
+try
+{
+$db = new PDO('sqlite:../youpaas.db');
+$result = $db->query('SELECT * FROM floatip');
 
+print "<table border=1>";
+print "<tr><td>IP Flottante</td></tr>";
+foreach($result as $row)
+{
+print "<td>".$row['ip_public']."</td>";
+}
+print "</table>";
+$db = NULL;
+}
 
+catch(PDOException $e)
+
+{
+print 'Exception : '.$e->getMessage();
+}
+?>
